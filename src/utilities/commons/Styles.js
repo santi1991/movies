@@ -1,34 +1,64 @@
-import { StyleSheet } from 'react-native';
+import styled from 'styled-components/native';
+import { colors, colorSelector } from './Colors';
+
+// import { StyleSheet } from 'react-native';
 
 
-export const darkTheme = StyleSheet.create({
-	background: {
-		backgroundColor: '#212121'
-	},
-	surface: {
-		backgroundColor: '#424242'
-	},
-	text: {
-		color: '#FFFFFF'
-	}
-});
+// const selectTextColor = (currentTheme) => {
+// 	if (currentTheme === 'dark') {
+// 		return colors.dark.text;
+// 	}
+// 	return colors.light.text;
+// };
 
-export const lightTheme = StyleSheet.create({
-	background: {
-		backgroundColor: '#FFFFFF'
-	},
-	surface: {
-		backgroundColor: '#F5F5F5'
-	},
-	text: {
-		color: '#000000'
-	}
-});
 
-// export const styles = StyleSheet.create({
-// 	container: {
-// 		flex: 1,
-// 		// justifyContent: 'center'
+export const Text = styled.Text`
+	color: ${({ theme }) => colorSelector(theme, 'text')};
+	font-weight: bold;
+	font-size: 15px;
+	text-align: center;
+`;
+
+export const ScreenContainer = styled.SafeAreaView`
+	background-color: ${({ theme }) => colorSelector(theme, 'background')};
+	flex: 1;
+	align-items: center;
+	justify-content: center;
+`;
+
+export const Button = styled.Pressable`
+	background-color: ${colors.app.primary};
+	border-radius: 10;
+	padding: 10px;
+	elevation: 2;
+	margin-bottom: 3;
+	margin-top: 3;
+`;
+
+
+
+// export const darkTheme = StyleSheet.create({
+// 	background: {
+// 		backgroundColor: '#212121'
 // 	},
+// 	surface: {
+// 		backgroundColor: '#424242'
+// 	},
+// 	text: {
+// 		color: '#FFFFFF'
+// 	}
 // });
+
+// export const lightTheme = StyleSheet.create({
+// 	background: {
+// 		backgroundColor: '#FFFFFF'
+// 	},
+// 	surface: {
+// 		backgroundColor: '#F5F5F5'
+// 	},
+// 	text: {
+// 		color: '#000000'
+// 	}
+// });
+
 

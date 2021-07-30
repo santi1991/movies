@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setDarkTheme, setLightTheme } from '../../utilities/app/reducers/themeReducer';
 import SplashScreen from '../splash/SplashScreen';
 import HomeScreen from '../home/HomeScreen';
-import { darkTheme, lightTheme } from '../../utilities/commons/Styles';
 
 const AppScreens = () => { 
 
@@ -12,17 +11,15 @@ const AppScreens = () => {
 	const dispatch = useDispatch();
 
 	const [loading, setLoading] = useState(true);
-	const theme = currentTheme === 'dark' ? darkTheme : lightTheme;
+
+	// const theme = currentTheme === 'dark' ? darkTheme : lightTheme;
 
 	const toggleTheme = (selectedTheme) => {
 		if (selectedTheme === 'dark') {
 			return dispatch(setDarkTheme());
 		}
-		else {
-			return dispatch(setLightTheme());
-		}
+		return dispatch(setLightTheme());
 	};
-
 
 	// const theme = lightTheme;
 
@@ -37,9 +34,10 @@ const AppScreens = () => {
 	}
 	return (
 		<HomeScreen 
-			theme={theme}
+			theme={currentTheme}
 			toggleTheme={toggleTheme}
 		/>					
 	);
 };
+
 export default AppScreens;
