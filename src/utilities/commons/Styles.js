@@ -28,11 +28,11 @@ export const ScreenContainer = styled.SafeAreaView`
 
 export const Button = styled.Pressable`
 	background-color: ${colors.app.primary};
-	border-radius: 10;
+	border-radius: 10px;
 	padding: 10px;
 	elevation: 2;
-	margin-bottom: 3;
-	margin-top: 3;
+	margin-bottom: 3px;
+	margin-top: 3px;
 `;
 
 
