@@ -11,6 +11,7 @@ const AppScreens = () => {
 	const dispatch = useDispatch();
 
 	const [loading, setLoading] = useState(true);
+	const toggleLoading = () => setLoading(!loading);
 
 	// const theme = currentTheme === 'dark' ? darkTheme : lightTheme;
 
@@ -23,14 +24,8 @@ const AppScreens = () => {
 
 	// const theme = lightTheme;
 
-	useEffect(() => {
-		setTimeout(() => {
-			setLoading(false);
-		}, 2000);
-	}, []);
-
 	if (loading === true) {
-		return <SplashScreen />;
+		return <SplashScreen toggleLoading={toggleLoading} />;
 	}
 	return (
 		<HomeScreen 

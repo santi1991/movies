@@ -23,7 +23,7 @@ module.exports = {
 		'prettier/prettier': 'off',
 		'react-native/no-unused-styles': 'warn',
 		'react-native/no-inline-styles': 'off',
-		'react-native/no-raw-text': ['warn', {
+		'react-native/no-raw-text': ['off', {  //warn
 			skip: ['CustomText']
 		}],
 		'react-native/no-single-element-style-arrays': 'warn',
