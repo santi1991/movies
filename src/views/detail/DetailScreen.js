@@ -1,51 +1,84 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Alert, StyleSheet, Modal, View, Image, useWindowDimensions, FlatList } from 'react-native';
+import React, { useEffect, useState, useRef } from 'react';
+import { Alert, Modal, useWindowDimensions, FlatList } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { colors } from '../../utilities/commons/Colors';
-
 import * as S from '../../utilities/commons/Styles';
-import { createImgUrl, getCredits } from '../../utilities/api/moviedb';
+import { createImgUrl, fetchMovieData } from '../../utilities/api/moviedb';
 
 const DetailScreen = ({ theme, visible, onHideModal, movie }) => {
 
-	const [cast, setCast] = useState([]);
-	const movieImgUrl = createImgUrl(movie.backdrop_path);
+	const refYear = useRef('');
+
+	const [like, setLike] = useState(false);
+	const toggleLike = () => setLike(!like);
+
+	const heartIcon = like === true ? 'favorite' : 'favorite-border';
+	const heartIconColor = like === true ? 'red' : 'white';
+	
+	const [movieData, setMovieData] = useState({
+		cast: [],
+		genre: [],
+		production_companies: [],
+	});
+
+	const backdropImgUrl = createImgUrl(movie.backdrop_path);
+
 	const windowWidth = useWindowDimensions().width;
-	const x = windowWidth - 110;
+	/**
+	 * distance between the absolute IconButtons located at top of the screen
+	 */
+	const separation = windowWidth - 100;
+
+	/**
+	 * Function to obtain the year from this format yyyy-mm-dd
+	 */
+	const obtainReleaseYear = () => {
+		const releaseDate = movie.release_date?.split('-') || ['no data'];
+		refYear.current = releaseDate[0];
+	};
+
+	/**
+	 * The actors list array is huge! picking just the first ones	 
+	 */
+	const selectMainCast = (actorsList) => {
+		const mainCast = [];
+		for (let i = 0; i < 7; i++) {
+			mainCast.push(actorsList[i]);
+		}
+		return mainCast;
+	};
 
 	const renderCastItem = ({ item }) => {
 		const castImgUrl = createImgUrl(item.profile_path);
 		return (
-			<View style={styles.itemContainer}>
-
-				<Image
-					style={styles.castImg}
-					source={{ uri: castImgUrl }}
-				/>
-
-				<S.Text theme={theme} text_align={'center'}>{item.name}</S.Text>
-
-			</View>
+			<S.ActorItemView>
+				<S.ActorImage source={{ uri: castImgUrl }} />
+				<S.Text theme={theme} textAlign={'center'} marginTop={8}>{item.name}</S.Text>
+			</S.ActorItemView>
 		);
 	};
 
+	const renderGenreItem = ({ item }) => 
+		<S.Text key={item.id} theme={theme}>{item.name + ', '}</S.Text>;
+
 	useEffect(() => {
-		getCredits(movie.id)
+		obtainReleaseYear();
+		fetchMovieData(movie.id)
 			.then((data) => {
-				// console.log(data.cast);
-				const mainCast = [];
-				for (let i = 0; i < 4; i++) {
-					mainCast.push(data.cast[i]);
-				}
-				setCast(mainCast);
-				// for (let i of response.data.results) {
-				// 	console.log(i);
-				// }				
+				const credits = data[0];
+				const details = data[1];				
+				setMovieData(prevState => ({
+					...prevState,
+					cast: selectMainCast(credits.cast),
+					genre: details.genres,
+					production_companies: details.production_companies,
+				}));
 			})
 			.catch((error) => {
 				console.log(error);
-				alert('ERROR!');
+				onHideModal(!visible);
+				Alert.alert('UPS!...An ERROR occurred!', 'Try again later...');
 			});
 	}, []);
 
@@ -57,103 +90,76 @@ const DetailScreen = ({ theme, visible, onHideModal, movie }) => {
 			onRequestClose={() => onHideModal(!visible)}
 		>
 			<S.ScreenContainer theme={theme}>
-
 				<S.RowViewAbsolute>
-
-					<S.IconButton onPress={() => onHideModal(!visible)} margin_left={x.toString()} transparent>
+					<S.IconButton onPress={() => onHideModal(!visible)} marginLeft={separation} transparent>
 						<Icon name='arrow-back' size={24} color='white' />
 					</S.IconButton>
 
-					<S.IconButton onPress={() => Alert.alert('You loved this movie!')} transparent>
-						<Icon name='favorite-border' size={22} color='white' />
+					<S.IconButton onPress={toggleLike} transparent>
+						<Icon name={heartIcon} size={22} color={heartIconColor} />
 					</S.IconButton>
-
 				</S.RowViewAbsolute>
 
-				<Image
-					style={styles.imgSize}
-					source={{ uri: movieImgUrl }}
-				/>
+				<S.BackdropImage source={{ uri: backdropImgUrl }} />
 
-				<View style={styles.movieContainer}>
+				<S.MovieDetailView>
 
-					<View style={styles.rowContainer}>
-						<S.Headline theme={theme}>{movie.title} </S.Headline>
+					<S.RowView>
+						<S.Headline theme={theme} textAlign='left' >{movie.title} </S.Headline>
 						<Icon name='movie-filter' size={22} color='grey' />
-					</View>
+					</S.RowView>
 
-					<View style={styles.rowContainer}>
-
+					<S.RowView>
 						<S.Button onPress={() => Alert.alert('You wanna watch this movie!')}>
 							<S.Text theme={theme}>WATCH NOW</S.Text>
 						</S.Button>
-
 						<Rating
 							imageSize={18}
 							readonly={true}
 							startingValue={movie.vote_average / 2}
 							tintColor={theme === 'dark' ? colors.dark.surface : colors.light.surface}
 						/>
+					</S.RowView>
 
-					</View>
+					<S.Text theme={theme} textAlign={'left'} marginTop={12} marginBottom={12}>
+						{movie.overview}
+					</S.Text>
 
-					<S.Text theme={theme} text_align={'center'} >{movie.overview} </S.Text>
-					
 					<FlatList
 						horizontal
-						data={cast}
+						initialNumToRender={4}
+						data={movieData.cast}
 						renderItem={renderCastItem}
 						keyExtractor={item => item.id}
-						ListEmptyComponent={<S.Text theme={theme}>cargando...</S.Text>}
+						ListEmptyComponent={<S.Text theme={theme} marginTop={8} marginBottom={8}>cargando...</S.Text>}
 					/>
 
-					<S.Text theme={theme}>Studio: </S.Text>
-					<S.Text theme={theme}>Genre: </S.Text>
-					<S.Text theme={theme}>Release: </S.Text>
+					<S.Text theme={theme} marginTop={10} marginBottom={2} fontWeight={'bold'}>
+						{`Studio: `}
+						<S.Text theme={theme}>{movieData.production_companies[0]?.name || ''}</S.Text>
+					</S.Text>
 
-				</View>
+					<S.BasicRowView >
+						<S.Text theme={theme} fontWeight={'bold'}>{`Genre: `}</S.Text>
+						<FlatList
+							horizontal
+							data={movieData.genre}
+							renderItem={renderGenreItem}
+							keyExtractor={item => item.id}
+							ListEmptyComponent={<S.Text theme={theme} marginTop={8} marginBottom={8}>cargando...</S.Text>}
+						/>				
+					</S.BasicRowView>
 
+					<S.Text theme={theme} marginTop={2} marginBottom={2} fontWeight={'bold'}>
+						{`Release: `}
+						<S.Text theme={theme}>{refYear.current}</S.Text>
+					</S.Text>
 
-
+				</S.MovieDetailView>
 			</S.ScreenContainer>
 		</Modal>
 	);
 };
-
-const styles = StyleSheet.create({
-	imgSize: {
-		height: '35%',
-		width: '100%',
-		borderBottomLeftRadius: 20,
-		borderBottomRightRadius: 20
-	},
-	movieContainer: {
-		// justifyContent: 'space-evenly',
-		margin: 30,
-		// marginLeft: 30,
-		// marginRight: 30,		
-	},
-	rowContainer: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		marginBottom: 4,
-		marginTop: 4
-	},
-	itemContainer: {
-		backgroundColor: 'transparent',
-		height: 90,
-		width: 80,
-		margin: 1,
-		alignItems: 'center',
-		justifyContent: 'space-around'
-	},
-	castImg: {
-		height: 60,
-		width: 60,
-		borderRadius: 60
-	}
-});
 
 export default DetailScreen;
 

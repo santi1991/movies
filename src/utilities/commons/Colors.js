@@ -1,29 +1,15 @@
-// export const darkColors = {
-// 	primary: '#1DE9B6',
-// 	secondary: '#B388FF',
-// 	background: '#212121',
-// 	surface: '#424242',
-// 	text: '#FFFFFF',
-// 	border: '#EEEEEE',
-// 	error: '#BF360C',
-// };
-
-// export const lightColors = {
-// 	primary: '#1DE9B6',
-// 	secondary: '#B388FF',
-// 	background: '#FFFFFF',
-// 	surface: '#F5F5F5',
-// 	text: '#000000',
-// 	border: '#EEEEEE',
-// 	error: '#BF360C',
-// };
-
+/**
+ * main colors of the app
+ */
 export const baseColors = {
-	primary: '#1DE9B6', //'#F194FF'
+	primary: '#1DE9B6',
 	secondary: '#B388FF',
 	error: '#BF360C',
 };
 
+/**
+ * light and dark theme palette color
+ */
 export const colors = {
 	app: {
 		primary: '#1DE9B6',
@@ -46,6 +32,9 @@ export const colors = {
 	}
 };
 
+/**
+ * helper function that returns the desired color depending of the component and the current theme
+ */
 export const colorSelector = (currentTheme, type) => {
 	let color;
 	if (currentTheme === 'dark') {

@@ -1,137 +1,74 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-// import { decrement, increment } from '../../utilities/app/reducers/counterReducer';
+import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Settings from './Settings';
-// import DetailScreen from '../detail/DetailScreen';
 import HeaderSection from './HeaderSection';
 import ListSection from './ListSection';
 import * as S from '../../utilities/commons/Styles';
+import { ScrollView } from 'react-native';
 
-const HomeScreen = (props) => {
-
-	const { theme, toggleTheme } = props;
-
-	// const dispatch = useDispatch();
-	// const count = useSelector((state) => state.counter.value);
+const HomeScreen = ({ theme, toggleTheme }) => {
+	
+	const popularMovies = useSelector((state) => state.movies.popular);
 	const topRatedMovies = useSelector((state) => state.movies.topRated);
 	
-	// const [modalVisible, setModalVisible] = useState(false);
+	const initialState = {
+		popularMovies: popularMovies,
+		filteredPopularMovies: popularMovies,
+		topRatedMovies: topRatedMovies,
+		filteredTopRatedMovies: topRatedMovies
+	};
+
+	const [moviesList, setMoviesList] = useState(initialState);
+
+	const searchMovie = (filteredPopularResult, filteredTopRatedResult) => {
+		setMoviesList({ 
+			...moviesList, 
+			filteredPopularMovies: filteredPopularResult, 
+			filteredTopRatedMovies: filteredTopRatedResult
+		});
+	};
+	
 	const [settingsVisible, setSettingsVisible] = useState(false);
 
 	return (
 		<S.ScreenContainer theme={theme}>
+			<ScrollView contentContainerStyle={{ flex: 1 }} keyboardShouldPersistTaps='never'>
 
-			<S.IconButton onPress={() => setSettingsVisible(true)} align_self={'flex-end'}>
-				<Icon name='settings' size={21} color={theme === 'dark' ? 'white' : 'black'} />
-			</S.IconButton>
-
-			<S.HeaderContainer theme={theme}>
-				<HeaderSection
+				<Settings
+					visible={settingsVisible}
 					theme={theme}
-				/>
-			</S.HeaderContainer>
-
-			<S.ListContainer theme={theme}>
-
-				<ListSection
-					theme={theme}
-					topRated={topRatedMovies}
+					onHideModal={setSettingsVisible}
+					onToggleTheme={toggleTheme}
 				/>
 
-				
+				<S.IconButton onPress={() => setSettingsVisible(true)} alignSelf={'flex-end'}>
+					<Icon name='settings' size={21} color={theme === 'dark' ? 'white' : 'black'} />
+				</S.IconButton>
 
-								
-				{
-					settingsVisible &&
-					<Settings
-						visible={settingsVisible}
+				<S.HeaderContainer theme={theme}>
+					<HeaderSection
 						theme={theme}
-						onHideModal={setSettingsVisible}
-						onToggleTheme={toggleTheme}
+						masterPopularList={moviesList.popularMovies}
+						masterTopRatedList={moviesList.topRatedMovies}
+						onSearch={searchMovie}
 					/>
-				}
+				</S.HeaderContainer>
 
+				<S.ListContainer theme={theme}>
+					<ListSection
+						theme={theme}
+						// popular={popularMovies}
+						// topRated={topRatedMovies}
+						popular={moviesList.filteredPopularMovies}
+						topRated={moviesList.filteredTopRatedMovies}
+					/>
+				</S.ListContainer>
 
-			</S.ListContainer>
-
-			{/* {
-				modalVisible &&
-				<DetailScreen
-					theme={theme}
-					visible={modalVisible}
-					onHideModal={setModalVisible}
-				/>
-			} */}
-
+			</ScrollView>
 		</S.ScreenContainer>
 	);
 };
 
 export default HomeScreen;
 
-/*
-<S.Button onPress={() => setModalVisible(true)}>
-				<S.Text theme={theme}>Show Modal</S.Text>
-			</S.Button>
-
-
-
-			<S.Button onPress={() => toggleTheme('dark')}>
-				<S.Text theme={theme}>DARK</S.Text>
-			</S.Button>
-
-			<S.Button onPress={() => toggleTheme('light')}>
-				<S.Text theme={theme}>LIGHT</S.Text>
-			</S.Button>
-*/
-
-/*
---------------------------------------------------------
---------------------------------------------------------
-<S.Text theme={theme}>{count}</S.Text>
-<S.Button onPress={() => dispatch(increment())}>
-	<S.Text theme={theme}>Increment</S.Text>
-</S.Button>
-
-
-<S.Button onPress={() => dispatch(decrement())}>
-	<S.Text theme={theme}>Decrement</S.Text>
-</S.Button>
---------------------------------------------------------
---------------------------------------------------------
-*/
-
-
-/*
---------------------------------------------------------
---------------------------------------------------------
-<PressableView
-	style={[styles.button, styles.buttonOpen]}
-	onPress={() => setModalVisible(true)}
->
-	<Text style={styles.textStyle}>Show Modal</Text>
-</PressableView>
-<PressableView
-	style={[styles.button, styles.buttonOpen]}
-	onPress={() => dispatch(increment())}
->
-	<Text style={styles.textStyle}>Increment</Text>
-</PressableView>
-
-<PressableView
-	style={[styles.button, styles.buttonOpen]}
-	onPress={() => dispatch(decrement())}
->
-	<Text style={styles.textStyle}>Decrement</Text>
-</PressableView>
-
-<PressableView
-	style={[styles.button, styles.buttonOpen]}
-	onPress={() => toggleTheme('light')}
->
-	<Text style={styles.textStyle}>LIGHT</Text>
-</PressableView>
---------------------------------------------------------
---------------------------------------------------------
-*/
