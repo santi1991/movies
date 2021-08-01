@@ -13,6 +13,7 @@ const ListSection = ({ theme, popular, topRated }) => {
 
 	const openMovieDetails = (movie) => {
 		refMovie.current = movie;
+		// console.log(movie);		
 		setModalVisible(true);
 	};
 

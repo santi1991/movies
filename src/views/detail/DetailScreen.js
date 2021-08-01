@@ -44,7 +44,9 @@ const DetailScreen = ({ theme, visible, onHideModal, movie }) => {
 	const selectMainCast = (actorsList) => {
 		const mainCast = [];
 		for (let i = 0; i < 7; i++) {
-			mainCast.push(actorsList[i]);
+			if(actorsList[i]) {
+				mainCast.push(actorsList[i]);
+			}			
 		}
 		return mainCast;
 	};
@@ -67,21 +69,22 @@ const DetailScreen = ({ theme, visible, onHideModal, movie }) => {
 		fetchMovieData(movie.id)
 			.then((data) => {
 				const credits = data[0];
-				const details = data[1];				
+				const details = data[1];
+				const reducedCast = selectMainCast(credits.cast);
 				setMovieData(prevState => ({
 					...prevState,
-					cast: selectMainCast(credits.cast),
+					cast: reducedCast,
 					genre: details.genres,
 					production_companies: details.production_companies,
 				}));
 			})
 			.catch((error) => {
 				console.log(error);
-				onHideModal(!visible);
 				Alert.alert('UPS!...An ERROR occurred!', 'Try again later...');
+				onHideModal(!visible);				
 			});
 	}, []);
-
+			
 	return (
 		<Modal
 			presentationStyle='pageSheet'
