@@ -1,13 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { Alert, Modal, useWindowDimensions, FlatList } from 'react-native';
 import { Rating } from 'react-native-ratings';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { colors } from '../../utilities/commons/Colors';
 import * as S from '../../utilities/commons/Styles';
 import { createImgUrl, fetchMovieData } from '../../utilities/api/moviedb';
+import { useSelector } from 'react-redux';
 
-const DetailScreen = ({ theme, visible, onHideModal, movie }) => {
+const DetailScreen = ({ visible, onHideModal, movie }) => {
 
+	const theme = useSelector((state) => state.theme.theme);
 	const refYear = useRef('');
 
 	const [like, setLike] = useState(false);
@@ -56,13 +58,13 @@ const DetailScreen = ({ theme, visible, onHideModal, movie }) => {
 		return (
 			<S.ActorItemView>
 				<S.ActorImage source={{ uri: castImgUrl }} />
-				<S.Text theme={theme} textAlign={'center'} marginTop={8}>{item.name}</S.Text>
+				<S.Text textAlign={'center'} marginTop={8}>{item.name}</S.Text>
 			</S.ActorItemView>
 		);
 	};
 
 	const renderGenreItem = ({ item }) => 
-		<S.Text key={item.id} theme={theme}>{item.name + ', '}</S.Text>;
+		<S.Text key={item.id}>{item.name + ', '}</S.Text>;
 
 	useEffect(() => {
 		obtainReleaseYear();
@@ -92,7 +94,7 @@ const DetailScreen = ({ theme, visible, onHideModal, movie }) => {
 			visible={visible}
 			onRequestClose={() => onHideModal(!visible)}
 		>
-			<S.ScreenContainer theme={theme}>
+			<S.ScreenContainer>
 				<S.RowViewAbsolute>
 					<S.IconButton onPress={() => onHideModal(!visible)} marginLeft={separation} transparent>
 						<Icon name='arrow-back' size={24} color='white' />
@@ -108,23 +110,23 @@ const DetailScreen = ({ theme, visible, onHideModal, movie }) => {
 				<S.MovieDetailView>
 
 					<S.RowView>
-						<S.Headline theme={theme} textAlign='left' >{movie.title} </S.Headline>
+						<S.Headline textAlign='left' >{movie.title} </S.Headline>
 						<Icon name='movie-filter' size={22} color='grey' />
 					</S.RowView>
 
 					<S.RowView>
 						<S.Button onPress={() => Alert.alert('You wanna watch this movie!')}>
-							<S.Text theme={theme}>WATCH NOW</S.Text>
+							<S.Text>WATCH NOW</S.Text>
 						</S.Button>
 						<Rating
 							imageSize={18}
 							readonly={true}
 							startingValue={movie.vote_average / 2}
-							tintColor={theme === 'dark' ? colors.dark.surface : colors.light.surface}
+							tintColor={theme.colors.surface}
 						/>
 					</S.RowView>
 
-					<S.Text theme={theme} textAlign={'left'} marginTop={12} marginBottom={12}>
+					<S.Text textAlign={'left'} marginTop={12} marginBottom={12}>
 						{movie.overview}
 					</S.Text>
 
@@ -134,34 +136,40 @@ const DetailScreen = ({ theme, visible, onHideModal, movie }) => {
 						data={movieData.cast}
 						renderItem={renderCastItem}
 						keyExtractor={item => item.id}
-						ListEmptyComponent={<S.Text theme={theme} marginTop={8} marginBottom={8}>cargando...</S.Text>}
+						ListEmptyComponent={<S.Text marginTop={8} marginBottom={8}>cargando...</S.Text>}
 					/>
 
-					<S.Text theme={theme} marginTop={10} marginBottom={2} fontWeight={'bold'}>
+					<S.Text marginTop={10} marginBottom={2} fontWeight={'bold'}>
 						{`Studio: `}
-						<S.Text theme={theme}>{movieData.production_companies[0]?.name || ''}</S.Text>
+						<S.Text>{movieData.production_companies[0]?.name || ''}</S.Text>
 					</S.Text>
 
 					<S.BasicRowView >
-						<S.Text theme={theme} fontWeight={'bold'}>{`Genre: `}</S.Text>
+						<S.Text fontWeight={'bold'}>{`Genre: `}</S.Text>
 						<FlatList
 							horizontal
 							data={movieData.genre}
 							renderItem={renderGenreItem}
 							keyExtractor={item => item.id}
-							ListEmptyComponent={<S.Text theme={theme} marginTop={8} marginBottom={8}>cargando...</S.Text>}
+							ListEmptyComponent={<S.Text marginTop={8} marginBottom={8}>cargando...</S.Text>}
 						/>				
 					</S.BasicRowView>
 
-					<S.Text theme={theme} marginTop={2} marginBottom={2} fontWeight={'bold'}>
+					<S.Text marginTop={2} marginBottom={2} fontWeight={'bold'}>
 						{`Release: `}
-						<S.Text theme={theme}>{refYear.current}</S.Text>
+						<S.Text>{refYear.current}</S.Text>
 					</S.Text>
 
 				</S.MovieDetailView>
 			</S.ScreenContainer>
 		</Modal>
 	);
+};
+
+DetailScreen.propTypes = {
+	visible: PropTypes.bool,
+	onHideModal: PropTypes.func,
+	movie: PropTypes.object
 };
 
 export default DetailScreen;

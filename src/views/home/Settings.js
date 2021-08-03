@@ -1,10 +1,25 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { useDispatch, useSelector } from 'react-redux';
+import { setDarkTheme, setLightTheme } from '../../utilities/app/reducers/themeReducer';
 import { Modal } from 'react-native';
-import { colors } from '../../utilities/commons/Colors';
 import * as S from '../../utilities/commons/Styles';
 
-const Settings = ({ visible, theme, onHideModal, onToggleTheme }) => {
+const Settings = ({ visible, onHideModal }) => {
 
+	const theme = useSelector((state) => state.theme.theme);
+	const dispatch = useDispatch();
+
+	const onToggleTheme = (selectedTheme) => {
+		if (selectedTheme === 'dark') {
+			dispatch(setDarkTheme());
+		} 
+		else {
+			dispatch(setLightTheme());
+		}
+		onHideModal(!visible);
+	};
+	
 	return (
 		<Modal
 			animationType='slide'
@@ -12,25 +27,30 @@ const Settings = ({ visible, theme, onHideModal, onToggleTheme }) => {
 			visible={visible}
 			onRequestClose={() => onHideModal(!visible)}
 		>
-			<S.ModalView theme={theme} >
+			<S.ModalView>
 
-				<S.Title theme={theme}>Select Theme</S.Title>
+				<S.Title>Select Theme</S.Title>
 
 				<S.Button onPress={() => onToggleTheme('dark')}>
-					<S.Text theme={theme}>DARK Theme</S.Text>
+					<S.Text>DARK Theme</S.Text>
 				</S.Button>
 
 				<S.Button onPress={() => onToggleTheme('light')}>
-					<S.Text theme={theme}>LIGHT Theme</S.Text>
+					<S.Text>LIGHT Theme</S.Text>
 				</S.Button>
 
-				<S.Button theme={theme} backgroundColor={colors.app.secondary} onPress={() => onHideModal(!visible)}>
-					<S.Text theme={theme}>Close</S.Text>
+				<S.Button backgroundColor={theme.colors.secondary} onPress={() => onHideModal(!visible)}>
+					<S.Text>Close</S.Text>
 				</S.Button>
 
 			</S.ModalView>
 		</Modal>
 	);
+};
+
+Settings.propTypes = {
+	visible: PropTypes.bool,
+	onHideModal: PropTypes.func
 };
 
 export default Settings;

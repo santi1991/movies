@@ -1,23 +1,22 @@
 import styled from 'styled-components/native';
-import { colors, colorSelector } from './Colors';
 
 /**
  * View Styles
  */
 export const ScreenContainer = styled.SafeAreaView`
-	background-color: ${({ theme }) => colorSelector(theme, 'surface')};
+	background-color: ${(props)  => props.theme.colors.surface};
 	flex: 1;	
 `;
 
 export const HeaderContainer = styled.View`
-	background-color: ${({ theme }) => colorSelector(theme, 'surface')};
+	background-color: ${(props)  => props.theme.colors.surface};
 	flex: 1;
 	align-items: center;
  	justify-content: space-around;
 `;
 
 export const ListContainer = styled.View`
-	background-color: ${({ theme }) => colorSelector(theme, 'background')};
+	background-color: ${(props)  => props.theme.colors.background};
 	flex: 4;
 	padding: 15px;
 	elevation: 5;
@@ -26,7 +25,7 @@ export const ListContainer = styled.View`
 `;
 
 export const ModalView = styled.View`
-	background-color: ${({ theme }) => colorSelector(theme, 'background')};
+	background-color: ${(props)  => props.theme.colors.background};
 	margin: 20px;
 	border-radius: 20px;
 	padding: 35px;
@@ -100,38 +99,38 @@ export const ActorImage = styled.Image`
  * Text Styles
  */
 
-export const Caption = styled.Text`
-	color: ${({ theme }) => colorSelector(theme, 'text')};	
-	font-size: 12px;
-	text-align: ${props => props?.textAlign || 'center'};
-`;
+export const Caption = styled.Text(props => ({
+	color: props.theme.colors.text,
+	fontSize: props.theme.fontSizes.xm,
+	textAlign: props.textAlign || 'center',
+}));
 
 export const Text = styled(Caption)`
-	font-size: 14px;
-	text-align: ${props => props?.textAlign || 'left'};
-	margin-top: ${props => props?.marginTop || '0'}px;
-	margin-bottom: ${props => props?.marginBottom || '0'}px;
-	font-weight: ${props => props?.fontWeight || 'normal'};
+	font-size: ${props  => props.theme.fontSizes.sm};
+	text-align: ${props => props.textAlign || 'left'};
+	margin-top: ${props => props.marginTop || '0'}px;
+	margin-bottom: ${props => props.marginBottom || '0'}px;
+	font-weight: ${props => props.fontWeight || 'normal'};
 `;
 
 export const SubHeading = styled(Caption)`
-	font-size: 16px;
+	font-size: ${props  => props.theme.fontSizes.m};
 	font-weight: bold;
 `;
 
 export const Title = styled(Caption)`
-	font-size: 20px;
+	font-size: ${props  => props.theme.fontSizes.l};
 	font-weight: bold;
-	margin-top: ${props => props?.marginTop || '0'}px;
-	margin-bottom: ${props => props?.marginBottom || '0'}px;
+	margin-top: ${props => props.marginTop || '0'}px;
+	margin-bottom: ${props => props.marginBottom || '0'}px;
 `;
 
 export const Headline = styled(Caption)`
-	font-size: 26px;
+	font-size: ${props  => props.theme.fontSizes.xl};
 	font-weight: bold;
-	text-align: ${props => props?.textAlign || 'left'};
-	margin-left: ${props => props?.marginLeft || '0'}px;
-	margin-right: ${props => props?.marginRight || '0'}px;	
+	text-align: ${props => props.textAlign || 'left'};
+	margin-left: ${props => props.marginLeft || '0'}px;
+	margin-right: ${props => props.marginRight || '0'}px;	
 `;
 
 /**
@@ -139,7 +138,7 @@ export const Headline = styled(Caption)`
  */
 
 export const Button = styled.Pressable`
-	background-color: ${props => props?.backgroundColor || colors.app.primary};	
+	background-color: ${props => props.backgroundColor || props.theme.colors.primary};	
 	border-radius: 10px;
 	padding: 10px;
 	elevation: 4;	
@@ -149,15 +148,15 @@ export const Button = styled.Pressable`
 `;
 
 export const IconButton = styled(Button)`
-	background-color: ${props => props.transparent ? 'transparent' : colors.app.primary}
+	background-color: ${props => props.transparent ? 'transparent' : props.theme.colors.primary}
 	align-items: center;
 	justify-content: center;
-	margin-right: ${props => props?.marginLeft || '5'}px
-	align-self: ${props => props?.alignSelf || 'auto'}
-	height: 30px;
-	width: 30px;
+	margin-right: ${props => props.marginLeft || '5'}px
+	align-self: ${props => props.alignSelf || 'auto'}
+	height: 35px;
+	width: 35px;
 	border-radius: 50px;
-	padding: 0px;
+	padding: 2px;
 `;
 
 /**
@@ -165,8 +164,8 @@ export const IconButton = styled(Button)`
  */
 
 export const SearchInput = styled.TextInput`
-	background-color: ${({ theme }) => colorSelector(theme, 'background')};
-	color: ${({ theme }) => colorSelector(theme, 'text')};
+	background-color: ${(props)  => props.theme.colors.background};
+	color: ${(props)  => props.theme.colors.text};
 	font-size: 16px;
 	height: 35px;
 	width: 210px;

@@ -1,14 +1,13 @@
 import React from 'react';
 import store from './src/utilities/app/store';
 import { Provider } from 'react-redux';
-import AppScreens from './src/views/core/AppScreens';
-
+import AppContainer from './src/views/core/AppContainer';
 
 const App = () => {
 	
 	return (
 		<Provider store={store}>
-			<AppScreens/>
+			<AppContainer/>
 		</Provider>
 	);
 };

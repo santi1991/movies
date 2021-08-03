@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react';
-import { SafeAreaView, ActivityIndicator, Alert } from 'react-native';
+import { SafeAreaView, ActivityIndicator, Alert, useColorScheme } from 'react-native';
+import PropTypes from 'prop-types';
 import { useDispatch } from 'react-redux';
+import { setDarkTheme } from '../../utilities/app/reducers/themeReducer';
 import * as S from '../../utilities/commons/Styles';
 import { fetchAllMovies } from '../../utilities/api/moviedb';
 import { setPopularMovies, setTopRatedMovies } from '../../utilities/app/reducers/movieReducer';
@@ -8,11 +10,13 @@ import { setPopularMovies, setTopRatedMovies } from '../../utilities/app/reducer
 /**
  *  Component which purpose is to GET all list of movies within its side effect lifecycle
  */
-const SplashScreen = ({ theme, toggleLoading }) => {
+const SplashScreen = ({ toggleLoading }) => {
 
 	const dispatch = useDispatch();
+	const colorScheme = useColorScheme();
 
 	useEffect(() => {
+		colorScheme === 'dark' && dispatch(setDarkTheme());
 		fetchAllMovies()
 			.then((data) => {
 				const popularData = data[0];
@@ -32,9 +36,13 @@ const SplashScreen = ({ theme, toggleLoading }) => {
 	return (
 		<SafeAreaView style={{ flex: 1, justifyContent: 'center' }} >
 			<ActivityIndicator size='large' color='#00ff00' />
-			<S.Title theme={theme} marginTop={12}>Estamos obteniendo datos...</S.Title>
+			<S.Title marginTop={12}>Estamos obteniendo datos...</S.Title>
 		</SafeAreaView>
 	);
+};
+
+SplashScreen.propTypes = {
+	toggleLoading: PropTypes.func
 };
 
 export default SplashScreen;

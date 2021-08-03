@@ -1,19 +1,22 @@
 import React, { useState, useRef } from 'react';
+import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { Rating } from 'react-native-ratings';
-import { colors } from '../../utilities/commons/Colors';
 import { FlatList, Alert, Pressable } from 'react-native';
 import * as S from '../../utilities/commons/Styles';
 import { createImgUrl } from '../../utilities/api/moviedb';
 import DetailScreen from '../detail/DetailScreen';
 
-const ListSection = ({ theme, popular, topRated }) => {
+
+const ListSection = ({ popular, topRated }) => {
 
 	const refMovie = useRef({});
 	const [modalVisible, setModalVisible] = useState(false);
 
+	const theme = useSelector((state) => state.theme.theme);
+
 	const openMovieDetails = (movie) => {
 		refMovie.current = movie;
-		// console.log(movie);		
 		setModalVisible(true);
 	};
 
@@ -25,12 +28,12 @@ const ListSection = ({ theme, popular, topRated }) => {
 					<S.PosterImage source={{ uri: imgUrl }}/>
 				</Pressable>
 
-				<S.Text theme={theme} marginTop={4} marginBottom={4}>{item.title}</S.Text>
+				<S.Text marginTop={4} marginBottom={4}>{item.title}</S.Text>
 				<Rating
 					imageSize={17}
 					readonly={true}
 					startingValue={item.vote_average / 2}
-					tintColor={theme === 'dark' ? colors.dark.background : colors.light.background}
+					tintColor={theme.colors.background}
 					style={{ alignSelf: 'flex-start' }}
 				/>
 			</S.MovieItemVew>
@@ -42,15 +45,14 @@ const ListSection = ({ theme, popular, topRated }) => {
 			{
 				modalVisible &&
 				<DetailScreen
-					theme={theme}
 					movie={refMovie.current}
 					visible={modalVisible}
 					onHideModal={setModalVisible}
 				/>
 			}
 			<S.RowView>
-				<S.Text theme={theme}>RECOMMENDED FOR YOU</S.Text>
-				<S.Text theme={theme} onPress={() => Alert.alert('Hello.')}>See all</S.Text>
+				<S.Text>RECOMMENDED FOR YOU</S.Text>
+				<S.Text onPress={() => Alert.alert('Hello.')}>See all</S.Text>
 			</S.RowView>
 
 			<FlatList
@@ -58,12 +60,12 @@ const ListSection = ({ theme, popular, topRated }) => {
 				data={popular}
 				renderItem={renderMovieItem}
 				keyExtractor={item => item.id}
-				ListEmptyComponent={<S.Text theme={theme}>no matches found...</S.Text>}
+				ListEmptyComponent={<S.Text>no matches found...</S.Text>}
 			/>
 
 			<S.RowView>
-				<S.Text theme={theme}>TOP RATED</S.Text>
-				<S.Text theme={theme} onPress={() => Alert.alert('Fetch page 2 ')} >See all</S.Text>
+				<S.Text>TOP RATED</S.Text>
+				<S.Text onPress={() => Alert.alert('Fetch page 2 ')} >See all</S.Text>
 			</S.RowView>
 
 			<FlatList
@@ -71,10 +73,15 @@ const ListSection = ({ theme, popular, topRated }) => {
 				data={topRated}
 				renderItem={renderMovieItem}
 				keyExtractor={item => item.id}
-				ListEmptyComponent={<S.Text theme={theme}>no matches found...</S.Text>}
+				ListEmptyComponent={<S.Text>no matches found...</S.Text>}
 			/>
 		</>
 	);
+};
+
+ListSection.propTypes = {
+	popular: PropTypes.array,
+	topRated: PropTypes.array,
 };
 
 export default ListSection;
