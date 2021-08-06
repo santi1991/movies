@@ -1,3 +1,4 @@
+import { DefaultTheme as defaultNavTheme , DarkTheme as darkNavTheme  } from '@react-navigation/native';
 /**
  * common colors
  */
@@ -23,6 +24,7 @@ export const fontSizes = {
  *  dark theme object
  */
 export const darkTheme = {
+	name: 'dark',
 	colors: {	
 		...baseColors,	
 		background: '#212121',
@@ -40,6 +42,7 @@ export const darkTheme = {
  * light theme object
  */
 export const lightTheme = {
+	name: 'light',
 	colors: {	
 		...baseColors,	
 		background: '#FFFFFF',
@@ -52,3 +55,13 @@ export const lightTheme = {
 		...fontSizes
 	}
 };
+
+export const lightNavTheme = {
+	...defaultNavTheme,
+	colors: {
+	  ...defaultNavTheme.colors,
+	  primary: baseColors.primary,
+	},
+};
+
+export { darkNavTheme };

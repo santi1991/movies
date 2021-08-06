@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { selectAllPopular } from '../../utilities/app/slices/popularSlice';
 import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Settings from './Settings';
@@ -7,10 +8,10 @@ import ListSection from './ListSection';
 import * as S from '../../utilities/commons/Styles';
 
 const HomeScreen = () => {
-
 	const theme = useSelector((state) => state.theme.theme);
-	const popularMovies = useSelector((state) => state.movies.popular);
-	const topRatedMovies = useSelector((state) => state.movies.topRated);
+	const { page, popularMovies } = useSelector(selectAllPopular);
+	console.log(page);
+	const topRatedMovies = useSelector((state) => state.topRated.topRated);
 
 	const initialState = {
 		popularMovies: popularMovies,
@@ -32,13 +33,16 @@ const HomeScreen = () => {
 	const [settingsVisible, setSettingsVisible] = useState(false);
 
 	return (
-		<S.ScreenContainer>			
+		<S.ScreenContainer>
 			<Settings
 				visible={settingsVisible}
 				onHideModal={setSettingsVisible}
 			/>
 
-			<S.IconButton onPress={() => setSettingsVisible(true)} alignSelf={'flex-end'}>
+			<S.IconButton 
+				onPress={() => setSettingsVisible(true)} 
+				alignSelf={'flex-end'}
+			>
 				<Icon name='settings' size={21} color={theme.colors.background} />
 			</S.IconButton>
 

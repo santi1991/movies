@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
-import { setDarkTheme, setLightTheme } from '../../utilities/app/reducers/themeReducer';
+import { setDarkTheme, setLightTheme } from '../../utilities/app/slices/themeSlice';
 import { Modal } from 'react-native';
 import * as S from '../../utilities/commons/Styles';
 

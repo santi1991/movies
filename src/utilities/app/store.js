@@ -1,10 +1,13 @@
-import { configureStore } from '@reduxjs/toolkit';
-import themeReducer from './reducers/themeReducer';
-import movieReducer from './reducers/movieReducer';
+import { configureStore  } from '@reduxjs/toolkit';
+import themeReducer from './slices/themeSlice';
+import popularReducer from './slices/popularSlice';
+import topRatedReducer from './slices/topRatedSlice';
+
 
 export default configureStore({
 	reducer: {
 		theme: themeReducer,
-		movies: movieReducer
-	},
+		topRated: topRatedReducer,
+		popular: popularReducer
+	}
 });

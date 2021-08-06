@@ -1,10 +1,13 @@
 import axios from 'axios';
 import { API_URL, API_KEY, IMG_URL } from '@env';
 
+const axiosClient = axios.create();
+axiosClient.defaults.baseURL = API_URL;
+// axiosClient.defaults.timeout = 9000; // Request will be timeout after 9 seconds.
+
 /**
  * constants to construct URLs depending of the GET request needed
 */
-
 const API_SEARCH = '/movie';
 const PARAM_KEY = 'api_key=';
 const PARAM_PAGE = 'page=';
@@ -19,24 +22,23 @@ const IMG_SIZE = '/w500';
 export const createImgUrl = (imgPath) => 
 	`${IMG_URL}${IMG_SIZE}${imgPath}`;
 
-const createMovieUrl = (searchTerm, page = 1) =>
-	`${API_URL}${API_SEARCH}/${searchTerm}?${PARAM_KEY}${API_KEY}&${PARAM_LANGUAGE}${LANGUAGE_TAG}&${PARAM_PAGE}${page}`;
+const createMovieUrl = (searchTerm, page) =>
+	`${API_SEARCH}/${searchTerm}?${PARAM_KEY}${API_KEY}&${PARAM_LANGUAGE}${LANGUAGE_TAG}&${PARAM_PAGE}${page}`;
 
 const createCreditsUrl = (movieId) => 
-	`${API_URL}${API_SEARCH}/${movieId}${API_SEARCH_CREDITS}?${PARAM_KEY}${API_KEY}&${PARAM_LANGUAGE}${LANGUAGE_TAG}`;
+	`${API_SEARCH}/${movieId}${API_SEARCH_CREDITS}?${PARAM_KEY}${API_KEY}&${PARAM_LANGUAGE}${LANGUAGE_TAG}`;
 
 const createDetailsUrl = (movieId) =>
-	`${API_URL}${API_SEARCH}/${movieId}?${PARAM_KEY}${API_KEY}&${PARAM_LANGUAGE}${LANGUAGE_TAG}`;
+	`${API_SEARCH}/${movieId}?${PARAM_KEY}${API_KEY}&${PARAM_LANGUAGE}${LANGUAGE_TAG}`;
 
 /**
  *  fetch list of movies by category
  */
-export const getMovies = async (searchTerm) => {
-	const url = createMovieUrl(searchTerm);
+export const getMovies = async (searchTerm, page = 1) => {
+	const url = createMovieUrl(searchTerm, page);
 	try {		
-		// return await axios.get(url);
-		const result = await axios.get(url);
-		return result.data;
+		const response = await axiosClient.get(url);
+		return response.data;
 	}
 	catch (error) {
 		console.log(error);
@@ -49,8 +51,8 @@ export const getMovies = async (searchTerm) => {
 export const getCredits = async (movieId) => {
 	const url = createCreditsUrl(movieId);
 	try {		
-		const result = await axios.get(url);
-		return result.data;
+		const response = await axiosClient.get(url);
+		return response.data;
 	}
 	catch (error) {
 		console.log(error);
@@ -62,9 +64,9 @@ export const getCredits = async (movieId) => {
  */
 export const getDetails = async (movieId) => {
 	const url = createDetailsUrl(movieId);
-	try {		
-		const result = await axios.get(url);
-		return result.data;
+	try {	
+		const response = await axiosClient.get(url);
+		return response.data;	
 	}
 	catch (error) {
 		console.log(error);

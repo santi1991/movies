@@ -16,5 +16,5 @@ export const movieSlice = createSlice({
 	}
 });
 
-export const { setPopularMovies, setTopRatedMovies } = movieSlice.actions;
+export const { setTopRatedMovies } = movieSlice.actions;
 export default movieSlice.reducer;

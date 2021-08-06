@@ -39,20 +39,7 @@ const DetailScreen = ({ visible, onHideModal, movie }) => {
 		const releaseDate = movie.release_date?.split('-') || ['no data'];
 		refYear.current = releaseDate[0];
 	};
-
-	/**
-	 * The actors list array is huge! picking just the first ones	 
-	 */
-	const selectMainCast = (actorsList) => {
-		const mainCast = [];
-		for (let i = 0; i < 7; i++) {
-			if(actorsList[i]) {
-				mainCast.push(actorsList[i]);
-			}			
-		}
-		return mainCast;
-	};
-
+	
 	const renderCastItem = ({ item }) => {
 		const castImgUrl = createImgUrl(item.profile_path);
 		return (
@@ -72,7 +59,7 @@ const DetailScreen = ({ visible, onHideModal, movie }) => {
 			.then((data) => {
 				const credits = data[0];
 				const details = data[1];
-				const reducedCast = selectMainCast(credits.cast);
+				const reducedCast = credits.cast.slice(0, 4);
 				setMovieData(prevState => ({
 					...prevState,
 					cast: reducedCast,
