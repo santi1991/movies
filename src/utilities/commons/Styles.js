@@ -8,6 +8,8 @@ export const ScreenContainer = styled.SafeAreaView`
 	flex: 1;	
 `;
 
+export const ScreenScrollView = styled.ScrollView``;
+
 export const HeaderContainer = styled.View`
 	background-color: ${(props)  => props.theme.colors.surface};
 	flex: 1;

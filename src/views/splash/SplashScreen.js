@@ -14,7 +14,6 @@ import { fetchTopRated } from '../../utilities/app/slices/topRatedSlice';
  */
 const SplashScreen = ({ toggleLoading }) => {
 
-	// console.log('render: SplashScreen');
 	const dispatch = useDispatch();
 	const colorScheme = useColorScheme();
 
@@ -22,7 +21,6 @@ const SplashScreen = ({ toggleLoading }) => {
 	const topRatedStatus = useSelector(state => state.topRated.status);
 
 	useEffect(() => {
-		// console.log('render: SplashScreen useEffect');		
 		colorScheme === 'dark' && dispatch(setDarkTheme());
 		const fetchMovies = async () => {
 			popularStatus === 'idle' && await dispatch(fetchPopular()).unwrap();
@@ -31,6 +29,14 @@ const SplashScreen = ({ toggleLoading }) => {
 		};
 		fetchMovies();
 	}, []);
+
+	// useEffect(() => {
+	// 	if (['succeeded', 'failed'].includes(topRatedStatus) && ['succeeded', 'failed'].includes(popularStatus)) {
+	// 		toggleLoading();
+	// 	}
+
+	// }, [popularStatus, topRatedStatus]);
+
 		
 	return (
 		<SafeAreaView style={{ flex: 1, justifyContent: 'center' }} >

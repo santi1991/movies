@@ -42,6 +42,11 @@ export const topRatedSlice = createSlice({
 	}
 });
 
+/**
+ * Selectors
+ */
+export const selectAllTopRated = state => state.topRated.topRated;
+
 export const selectTopRatedById = (state, movieId) =>
 	state.topRated.topRated.find(movie => movie.id === movieId);
 

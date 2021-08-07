@@ -52,7 +52,9 @@ export default popularSlice.reducer;
 /**
  * Selectors
  */
-export const selectAllPopular = state => { return { page: state.popular.page, popularMovies: state.popular.popular }; };
+export const selectAllPopular = state => state.popular.popular;
+// ❌ WARNING: this _always_ returns a new reference, so it will _always_ re-render!
+// export const selectAllPopular = state => { return { page: state.popular.page, popularMovies: state.popular.popular }; };
 
 export const selectPopularById = (state, movieId) =>
 	state.popular.popular.find(movie => movie.id === movieId);

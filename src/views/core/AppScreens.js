@@ -7,6 +7,7 @@ const Stack = createStackNavigator();
 
 const AppScreens = () => {
 
+	// console.log('render: AppScreens');
 	const [isLoading, setIsLoading] = useState(true);
 	const toggleLoading = () => setIsLoading(!isLoading);
 
