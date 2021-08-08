@@ -23,6 +23,12 @@ const AppScreens = () => {
 				headerShown: false
 			}}
 		>
+			{/* <Stack.Screen
+				
+				options={{
+					headerT
+				}}
+			/> */}
 			{
 				contentScreens.map((s) => {
 					return (

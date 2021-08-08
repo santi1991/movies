@@ -8,7 +8,9 @@ export const ScreenContainer = styled.SafeAreaView`
 	flex: 1;	
 `;
 
-export const ScreenScrollView = styled.ScrollView``;
+export const ScreenScrollView = styled.ScrollView`
+	background-color: ${(props)  => props.theme.colors.surface};
+`;
 
 export const HeaderContainer = styled.View`
 	background-color: ${(props)  => props.theme.colors.surface};
@@ -46,6 +48,8 @@ export const RowView = styled(BasicRowView)`
 `;
 
 export const RowViewAbsolute = styled(RowView)`
+	justify-content: space-between;
+	width: 100%;
 	position: absolute;
 	zIndex : 1;
 `;
@@ -58,7 +62,7 @@ export const MovieDetailView = styled.ScrollView`
 `;
 
 export const MovieItemVew = styled.View`
-	backgroundColor: transparent;
+	background-color: transparent;
 	height: 150px;
 	width: 130px;
 	margin-left: 8px;
@@ -147,6 +151,10 @@ export const Button = styled.Pressable`
 	margin: 4px;
 	align-items: center;
 	justify-content: center;
+`;
+
+export const ButtonClose = styled(Button)`
+	background-color: ${props => props.backgroundColor || props.theme.colors.secondary};
 `;
 
 export const IconButton = styled(Button)`

@@ -1,33 +1,27 @@
 import React from 'react';
 import { FlatList, Pressable, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
-import { Rating } from 'react-native-ratings';
-import { selectAllPopular } from '../../utilities/app/slices/popularSlice';
+// import { selectAllPopular } from '../../utilities/app/slices/popularSlice';
 import * as S from '../../utilities/commons/Styles';
 import { createImgUrl } from '../../utilities/api/moviedb';
+import MoviePoster from './MoviePoster';
 
-const PopularList = ({ onPressPoster }) => {
+const PopularList = ({ popularMovies, onPressPoster }) => {
 
-	const popularMovies = useSelector(selectAllPopular);
+	// console.log('render PopularList');
+	// const popularMovies = useSelector(selectAllPopular);
+	const theme = useSelector(state => state.theme);	
 
-	const renderMoviePoster = ({ item }) => {
-		const imgUrl = createImgUrl(item.poster_path);
+	const renderMoviePoster = (movie) => {
+		const posterImgUrl = createImgUrl(movie.poster_path);
 		return (
-			<S.MovieItemVew>
-				<Pressable onPress={() => onPressPoster(item)}>
-					<S.PosterImage source={{ uri: imgUrl }} />
-				</Pressable>
-
-				<S.Text marginTop={4} marginBottom={4}>{item.title}</S.Text>
-				<Rating
-					imageSize={17}
-					readonly={true}
-					startingValue={item.vote_average / 2}
-					// tintColor={theme.colors.background}
-					tintColor='white'
-					style={{ alignSelf: 'flex-start' }}
+			<Pressable onPress={() => onPressPoster(movie, 'popular')}>
+				<MoviePoster 
+					movie={movie} 
+					imgUrl={posterImgUrl}
+					color={theme.colors.background}
 				/>
-			</S.MovieItemVew>
+			</Pressable>
 		);
 	};
 
@@ -40,7 +34,7 @@ const PopularList = ({ onPressPoster }) => {
 			<FlatList
 				horizontal
 				data={popularMovies}
-				renderItem={renderMoviePoster}
+				renderItem={({ item }) => renderMoviePoster(item)}
 				keyExtractor={item => item.id}
 				ListEmptyComponent={<S.Text>no matches found...</S.Text>}
 			/>
@@ -48,5 +42,9 @@ const PopularList = ({ onPressPoster }) => {
 	);
 };
 
-export default PopularList;
+const areEqual = (prevProps, nextProps) => {
+	return prevProps.onPressPoster === nextProps.onPressPoster;
+};
+
+export default React.memo(PopularList, areEqual);
 

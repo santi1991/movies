@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
-import { setDarkTheme, setLightTheme } from '../../utilities/app/slices/themeSlice';
+import { useDispatch } from 'react-redux';
 import { Modal } from 'react-native';
+import { setDarkTheme, setLightTheme } from '../../utilities/app/slices/themeSlice';
+
 import * as S from '../../utilities/commons/Styles';
 
 const Settings = ({ visible, onHideModal }) => {
 
-	const theme = useSelector((state) => state.theme.theme);
 	const dispatch = useDispatch();
 
 	const onToggleTheme = (selectedTheme) => {
@@ -39,9 +39,9 @@ const Settings = ({ visible, onHideModal }) => {
 					<S.Text>LIGHT Theme</S.Text>
 				</S.Button>
 
-				<S.Button backgroundColor={theme.colors.secondary} onPress={() => onHideModal(!visible)}>
+				<S.ButtonClose onPress={() => onHideModal(!visible)}>
 					<S.Text>Close</S.Text>
-				</S.Button>
+				</S.ButtonClose>
 
 			</S.ModalView>
 		</Modal>

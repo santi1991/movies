@@ -1,33 +1,27 @@
 import React from 'react';
 import { FlatList, Pressable, Alert } from 'react-native';
 import { useSelector } from 'react-redux';
-import { Rating } from 'react-native-ratings';
-import { selectAllTopRated } from '../../utilities/app/slices/topRatedSlice';
+// import { selectAllTopRated } from '../../utilities/app/slices/topRatedSlice';
 import * as S from '../../utilities/commons/Styles';
 import { createImgUrl } from '../../utilities/api/moviedb';
+import MoviePoster from './MoviePoster';
 
-const TopRatedList = ({ onPressPoster }) => {
+const TopRatedList = ({ topRatedMovies, onPressPoster }) => {
 
-	const topRatedMovies = useSelector(selectAllTopRated);
+	// console.log('render TopRatedList');
+	// const topRatedMovies = useSelector(selectAllTopRated);
+	const theme = useSelector(state => state.theme);
 
-	const renderMoviePoster = ({ item }) => {
-		const imgUrl = createImgUrl(item.poster_path);
+	const renderMoviePoster = (movie) => {
+		const posterImgUrl = createImgUrl(movie.poster_path);
 		return (
-			<S.MovieItemVew>
-				<Pressable onPress={() => onPressPoster(item)}>
-					<S.PosterImage source={{ uri: imgUrl }} />
-				</Pressable>
-
-				<S.Text marginTop={4} marginBottom={4}>{item.title}</S.Text>
-				<Rating
-					imageSize={17}
-					readonly={true}
-					startingValue={item.vote_average / 2}
-					// tintColor={theme.colors.background}
-					tintColor='white'
-					style={{ alignSelf: 'flex-start' }}
+			<Pressable onPress={() => onPressPoster(movie, 'topRated')}>
+				<MoviePoster 
+					movie={movie} 
+					imgUrl={posterImgUrl}
+					color={theme.colors.background}
 				/>
-			</S.MovieItemVew>
+			</Pressable>
 		);
 	};
 
@@ -40,7 +34,7 @@ const TopRatedList = ({ onPressPoster }) => {
 			<FlatList
 				horizontal
 				data={topRatedMovies}
-				renderItem={renderMoviePoster}
+				renderItem={props => renderMoviePoster(props.item)}
 				keyExtractor={item => item.id}
 				ListEmptyComponent={<S.Text>no matches found...</S.Text>}
 			/>
@@ -48,5 +42,9 @@ const TopRatedList = ({ onPressPoster }) => {
 	);
 };
 
-export default TopRatedList;
+const areEqual = (prevProps, nextProps) => {
+	return prevProps.onPressPoster === nextProps.onPressPoster;
+};
+
+export default React.memo(TopRatedList, areEqual);
 

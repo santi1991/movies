@@ -41,7 +41,7 @@ const SplashScreen = ({ toggleLoading }) => {
 	return (
 		<SafeAreaView style={{ flex: 1, justifyContent: 'center' }} >
 			<ActivityIndicator size='large' color='#00ff00' />
-			<S.Title marginTop={12}>Estamos obteniendo datos...</S.Title>
+			<S.Title marginTop={12}>Obteniendo datos...</S.Title>
 		</SafeAreaView>
 	);
 };

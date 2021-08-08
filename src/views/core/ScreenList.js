@@ -25,8 +25,9 @@ export const contentScreens = [
 		name: 'MovieScreen',
 		component: MovieScreen,
 		options: {
-			headerShown: true,
-			title: 'Your Movies',
+			// headerShown: true,
+			// title: 'Your Movies',
+			// headerTransparent: true,
 		}
 	},
 ];

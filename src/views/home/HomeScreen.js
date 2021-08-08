@@ -1,88 +1,94 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
+import { selectCurrentTheme } from '../../utilities/app/slices/themeSlice';
 import { selectAllPopular } from '../../utilities/app/slices/popularSlice';
+import { selectAllTopRated } from '../../utilities/app/slices/topRatedSlice';
 import { useSelector } from 'react-redux';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Settings from './Settings';
 import HeaderSection from './HeaderSection';
-import ListSection from './ListSection';
 import * as S from '../../utilities/commons/Styles';
 import PopularList from '../movie/PopularList';
 import TopRatedList from '../movie/TopRatedList';
 
 const HomeScreen = ({ navigation, route }) => {
-	const count = useRef(0);
-	const theme = useSelector((state) => state.theme.theme);
+
+	// const count = useRef(0);
+	const theme = useSelector(selectCurrentTheme);
+
 	const popularMovies = useSelector(selectAllPopular);
-	// const popularMovies = useSelector((state) => state.popular.popular);
-	const topRatedMovies = useSelector((state) => state.topRated.topRated);
-
-	const initialState = {
-		popularMovies: popularMovies,
-		filteredPopularMovies: popularMovies,
-		topRatedMovies: topRatedMovies,
-		filteredTopRatedMovies: topRatedMovies
-	};
-
-	const [moviesList, setMoviesList] = useState(initialState);
+	const topRatedMovies = useSelector(selectAllTopRated);
 
 	const [settingsVisible, setSettingsVisible] = useState(false);
 
-	const searchMovie = (filteredPopularResult, filteredTopRatedResult) => {
-		setMoviesList({
-			...moviesList,
-			filteredPopularMovies: filteredPopularResult,
-			filteredTopRatedMovies: filteredTopRatedResult
+	const initialState = {
+		filteredPopular: popularMovies,
+		filteredTopRated: topRatedMovies
+	};
+	const [filtered, setFiltered] = useState(initialState);
+
+	const searchMovie = (popularResult, topRatedResult) => {
+		setFiltered({
+			...filtered,
+			filteredPopular: popularResult,
+			filteredTopRated: topRatedResult
 		});
 	};
 
-	const onPressPoster = (movie) => {
-		navigation.navigate('MovieScreen', { movie });
+	const handlePressPoster = (movie, type) => {
+		navigation.navigate('MovieScreen', { movieId: movie.id, type });
 	};
 
-	
-
+	// const handlePressPoster = useCallback((movie) => {
+	// 	navigation.navigate('MovieScreen', { movie });
+	// }, [navigation]);
 	useEffect(() => {
-		count.current++;
-		console.log(count.current);
+		console.log('HomeScreen mounted');
+		return () => {
+			console.log('HomeScreen UNMOUNTED');
+		};
 	});
 
-	// useEffect(() => {
-	// 	if(popularMovies) {
-	// 	  // do something with the item now that we now it exists
-	// 	  console.log('popularMovies');
-	// 	}
-	//   }, [popularMovies]);
 
 	return (
 		<S.ScreenContainer>
-			<Settings
-				visible={settingsVisible}
-				onHideModal={setSettingsVisible}
-			/>
+			<S.ScreenScrollView contentContainerStyle={{ flexGrow: 1 }} >
 
-			<S.IconButton
-				onPress={() => setSettingsVisible(true)}
-				alignSelf={'flex-end'}
-			>
-				<Icon
-					name='settings'
-					size={21}
-					color={theme.colors.background}
+				<Settings
+					visible={settingsVisible}
+					onHideModal={setSettingsVisible}
 				/>
-			</S.IconButton>
 
-			<S.HeaderContainer>
-				<HeaderSection
-					masterPopularList={moviesList.popularMovies}
-					masterTopRatedList={moviesList.topRatedMovies}
-					onSearch={searchMovie}
-				/>
-			</S.HeaderContainer>
+				<S.IconButton
+					onPress={() => setSettingsVisible(true)}
+					alignSelf={'flex-end'}
+				>
+					<Icon
+						name='settings'
+						size={21}
+						color={theme.colors.background}
+					/>
+				</S.IconButton>
 
-			<S.ListContainer>
-				<PopularList onPressPoster={onPressPoster}/>
-				<TopRatedList onPressPoster={onPressPoster}/>				
-			</S.ListContainer>
+				<S.HeaderContainer>
+					<HeaderSection
+						masterPopularList={popularMovies}
+						masterTopRatedList={topRatedMovies}
+						onSearch={searchMovie}
+					/>
+				</S.HeaderContainer>
+
+				<S.ListContainer>
+					<PopularList 
+						popularMovies={filtered.filteredPopular}
+						onPressPoster={handlePressPoster} 
+					/>
+					<TopRatedList 
+						topRatedMovies={filtered.filteredTopRated}
+						onPressPoster={handlePressPoster} 			
+					/>
+				</S.ListContainer>				
+				
+			</S.ScreenScrollView>
 		</S.ScreenContainer>
 	);
 };

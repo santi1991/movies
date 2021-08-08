@@ -1,27 +1,19 @@
 import React from 'react';
-import { Pressable } from 'react-native';
 import PropTypes from 'prop-types';
-import { createImgUrl } from '../../utilities/api/moviedb';
 import { Rating } from 'react-native-ratings';
 import * as S from '../../utilities/commons/Styles';
 
-const MoviePoster = ({ movie, onPress }) => {
-
-	const posterImgUrl = createImgUrl(movie.poster_path);
+const MoviePoster = ({ movie, imgUrl, color }) => {
 
 	return (
 		<S.MovieItemVew>
-			<Pressable onPress={() => onPress(movie)}>
-				<S.PosterImage source={{ uri: posterImgUrl }} />
-			</Pressable>
-
+			<S.PosterImage source={{ uri: imgUrl }} />
 			<S.Text marginTop={4} marginBottom={4}>{movie.title}</S.Text>
 			<Rating
 				imageSize={17}
 				readonly={true}
 				startingValue={movie.vote_average / 2}
-				// tintColor={theme.colors.background}
-				tintColor='white'
+				tintColor={color} // theme.colors.background
 				style={{ alignSelf: 'flex-start' }}
 			/>
 		</S.MovieItemVew>
@@ -29,7 +21,9 @@ const MoviePoster = ({ movie, onPress }) => {
 };
 
 MoviePoster.propTypes = {
-	movie: PropTypes.object
+	movie: PropTypes.object,
+	imgUrl: PropTypes.string,
+	color: PropTypes.string
 };
 
 export default MoviePoster;

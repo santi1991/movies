@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Icon from 'react-native-vector-icons/MaterialIcons';
-import * as S from '../../utilities/commons/Styles';
 import { useSelector } from 'react-redux';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import { selectCurrentTheme } from '../../utilities/app/slices/themeSlice';
+import * as S from '../../utilities/commons/Styles';
+
 
 const HeaderSection = ({ onSearch, masterPopularList, masterTopRatedList }) => {
 
-	const theme = useSelector((state) => state.theme.theme);
+	const theme = useSelector(selectCurrentTheme);
 	const [search, setSearch] = useState('');
 
 	const filterList = (masterArray, targetText) => {
