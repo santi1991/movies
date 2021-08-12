@@ -1,6 +1,6 @@
 import HomeScreen from '../home/HomeScreen';
 import MovieScreen from '../movie/MovieScreen';
-
+import FavoritesScreen from '../favorites/FavoritesScreen';
 /**
  *  screen options
  * {
@@ -28,6 +28,16 @@ export const contentScreens = [
 			// headerShown: true,
 			// title: 'Your Movies',
 			// headerTransparent: true,
+		}
+	},
+	{
+		id: 'FavoritesScreen',
+		name: 'FavoritesScreen',
+		component: FavoritesScreen,
+		options: {
+			headerShown: true,
+			title: 'Your Favorites',
+			headerTransparent: true,
 		}
 	},
 ];

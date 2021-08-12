@@ -4,24 +4,24 @@ import styled from 'styled-components/native';
  * View Styles
  */
 export const ScreenContainer = styled.SafeAreaView`
-	background-color: ${(props)  => props.theme.colors.surface};
+	background-color: ${(props)  => props.theme.colors.background};
 	flex: 1;	
 `;
 
 export const ScreenScrollView = styled.ScrollView`
-	background-color: ${(props)  => props.theme.colors.surface};
+	background-color: ${(props)  => props.theme.colors.background};
 `;
 
 export const HeaderContainer = styled.View`
-	background-color: ${(props)  => props.theme.colors.surface};
-	flex: 1;
+	background-color: ${(props)  => props.theme.colors.background};
+	flex-grow: 1;
 	align-items: center;
  	justify-content: space-around;
 `;
 
 export const ListContainer = styled.View`
-	background-color: ${(props)  => props.theme.colors.background};
-	flex: 4;
+	background-color: ${(props)  => props.theme.colors.surface};
+	flex-grow: 4;
 	padding: 15px;
 	elevation: 5;
 	border-top-left-radius: 25px;
@@ -29,7 +29,7 @@ export const ListContainer = styled.View`
 `;
 
 export const ModalView = styled.View`
-	background-color: ${(props)  => props.theme.colors.background};
+	background-color: ${(props)  => props.theme.colors.surface};
 	margin: 20px;
 	border-radius: 20px;
 	padding: 35px;
@@ -62,11 +62,12 @@ export const MovieDetailView = styled.ScrollView`
 `;
 
 export const MovieItemVew = styled.View`
+	justify-content: space-around;
 	background-color: transparent;
-	height: 150px;
+	height: 215px;
 	width: 130px;
-	margin-left: 8px;
-	margin-right: 8px;
+	margin-left: 6px;
+	margin-right: 6px;
 `;
 
 export const ActorItemView = styled.View`
@@ -83,8 +84,9 @@ export const ActorItemView = styled.View`
  */
 
 export const PosterImage = styled.Image`
+	align-self: center;
 	height: 150px;
-	width: 120px;
+	width: 110px;
 	border-radius: 14px;
 `;
 
@@ -174,7 +176,7 @@ export const IconButton = styled(Button)`
  */
 
 export const SearchInput = styled.TextInput`
-	background-color: ${(props)  => props.theme.colors.background};
+	background-color: ${(props)  => props.theme.colors.surface};
 	color: ${(props)  => props.theme.colors.text};
 	font-size: 16px;
 	height: 35px;

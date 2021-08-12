@@ -123,7 +123,7 @@ const DetailScreen = ({ visible, onHideModal, movie }) => {
 						data={movieData.cast}
 						renderItem={renderCastItem}
 						keyExtractor={item => item.id}
-						ListEmptyComponent={<S.Text marginTop={8} marginBottom={8}>cargando...</S.Text>}
+						ListEmptyComponent={<S.Text marginTop={8} marginBottom={8}>Something went wrong...</S.Text>}
 					/>
 
 					<S.Text marginTop={10} marginBottom={2} fontWeight={'bold'}>

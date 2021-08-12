@@ -11,7 +11,7 @@ import AppScreens from './AppScreens';
 const AppContainer = () => {
 	const navigationRef = useNavigationContainerRef();
 
-	// const theme = useSelector((state) => state.theme.theme);
+	// const theme = useSelector((state) => state.theme);
 	const theme = useSelector(selectCurrentTheme);
 	// useReduxDevToolsExtension(navigationRef);
 

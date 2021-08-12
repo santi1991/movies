@@ -24,6 +24,14 @@ export const popularSlice = createSlice({
 		setPopularMovies: (state, action) => {
 			state.popular = state.popular.concat(action.payload);
 		},
+		updatePopularMovies: (state, action) => {
+			const movieIdx = state.popular.findIndex(element => element.id === action.payload.id);
+			
+			const newMovieArray = state.popular.slice();
+			newMovieArray.splice(movieIdx, 1, action.payload);
+			return newMovieArray;
+			
+		}
 	},
 	extraReducers: {
 		[fetchPopular.pending]: (state, action) => {
@@ -33,7 +41,7 @@ export const popularSlice = createSlice({
 			return {
 				...state,
 				status: 'succeeded',
-				popular: state.popular.concat(action.payload) // Add any fetched movies to the array
+				popular: action.payload // Add any fetched movies to the array
 			};
 			// state.status = 'succeeded';
 			// state.popular = state.popular.concat(action.payload);
@@ -45,7 +53,7 @@ export const popularSlice = createSlice({
 	}
 });
 
-export const { setPopularMovies } = popularSlice.actions;
+export const { setPopularMovies, updatePopularMovies } = popularSlice.actions;
 
 export default popularSlice.reducer;
 

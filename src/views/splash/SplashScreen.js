@@ -23,12 +23,18 @@ const SplashScreen = ({ toggleLoading }) => {
 	useEffect(() => {
 		colorScheme === 'dark' && dispatch(setDarkTheme());
 		const fetchMovies = async () => {
-			popularStatus === 'idle' && await dispatch(fetchPopular()).unwrap();
+			popularStatus === 'idle' && await dispatch(fetchPopular()).unwrap();			
 			topRatedStatus === 'idle' && await dispatch(fetchTopRated()).unwrap();	
 			toggleLoading();
 		};
 		fetchMovies();
 	}, []);
+
+	// useEffect(() => {
+	// 	dispatch(fetchPopular());
+	// 	dispatch(fetchTopRated());
+	// 	toggleLoading();
+	// }, []);
 
 	// useEffect(() => {
 	// 	if (['succeeded', 'failed'].includes(topRatedStatus) && ['succeeded', 'failed'].includes(popularStatus)) {

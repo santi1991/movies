@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Rating } from 'react-native-ratings';
-import * as S from '../../utilities/commons/Styles';
+import * as S from '../../../utilities/commons/Styles';
 
 const MoviePoster = ({ movie, imgUrl, color }) => {
 
 	return (
 		<S.MovieItemVew>
 			<S.PosterImage source={{ uri: imgUrl }} />
-			<S.Text marginTop={4} marginBottom={4}>{movie.title}</S.Text>
+			<S.Text>{movie.title}</S.Text>
 			<Rating
 				imageSize={17}
 				readonly={true}

@@ -7,8 +7,8 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import Settings from './Settings';
 import HeaderSection from './HeaderSection';
 import * as S from '../../utilities/commons/Styles';
-import PopularList from '../movie/PopularList';
-import TopRatedList from '../movie/TopRatedList';
+import PopularList from './lists/PopularList';
+import TopRatedList from './lists/TopRatedList';
 
 const HomeScreen = ({ navigation, route }) => {
 
@@ -61,6 +61,17 @@ const HomeScreen = ({ navigation, route }) => {
 				<S.IconButton
 					onPress={() => setSettingsVisible(true)}
 					alignSelf={'flex-end'}
+				>
+					<Icon
+						name='settings'
+						size={21}
+						color={theme.colors.background}
+					/>
+				</S.IconButton>
+
+				<S.IconButton
+					onPress={() => navigation.navigate('FavoritesScreen')}
+					alignSelf={'flex-start'}
 				>
 					<Icon
 						name='settings'
