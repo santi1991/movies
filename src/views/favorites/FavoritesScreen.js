@@ -13,7 +13,7 @@ const FavoritesScreen = ({ navigation, route }) => {
 	const renderMoviePoster = (movie) => {
 		const posterImgUrl = createImgUrl(movie.poster_path);
 		return (
-			<Pressable onPress={() => console.log(movie)}>
+			<Pressable onPress={() => navigation.navigate('MovieScreen', { movieId: movie.id })}>
 				<MoviePoster
 					movie={movie}
 					imgUrl={posterImgUrl}

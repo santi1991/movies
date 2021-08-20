@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Alert, FlatList } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { Rating } from 'react-native-ratings';
-import { updatePopularMovies, selectPopularById } from '../../utilities/app/slices/popularSlice';
+import { selectPopularById } from '../../utilities/app/slices/popularSlice';
 import { selectTopRatedById } from '../../utilities/app/slices/topRatedSlice';
 import { createImgUrl, fetchMovieData } from '../../utilities/api/moviedb';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -16,16 +16,16 @@ const MovieScreen = ({ navigation, route }) => {
 
 	const refYear = useRef('');
 	const refMainCast = useRef([]);
+	// const refBackdropImgUrl = useRef('');
 
-	const [flag, setFlag] = useState(false);
-	const [text, setText] = useState(false);
+	// const movie = useSelector(state =>
+	// 	route.params.type === 'popular' ? selectPopularById(state, route.params.movieId) :
+	// 		selectTopRatedById(state, route.params.movieId)
+	// );
 	
-
-	const movie = useSelector(state =>
-		route.params.type === 'popular' ? selectPopularById(state, route.params.movieId) :
-			selectTopRatedById(state, route.params.movieId)
-	);
-	
+	const moviePopular = useSelector(state => selectPopularById(state, route.params.movieId));
+	const movieTopRated = useSelector(state => selectTopRatedById(state, route.params.movieId));
+	const movie = moviePopular ? moviePopular : movieTopRated;
 	const backdropImgUrl = createImgUrl(movie.backdrop_path);
 
 	const [status, setStatus] = useState({
@@ -35,8 +35,8 @@ const MovieScreen = ({ navigation, route }) => {
 		isError: false
 	});
 
-	const obtainReleaseYear = () => {
-		const releaseDate = movie.release_date?.split('-') || ['no data'];
+	const obtainReleaseYear = (currentMovie) => {
+		const releaseDate = currentMovie.release_date?.split('-') || ['no data'];
 		return releaseDate[0];
 	};
 
@@ -52,25 +52,14 @@ const MovieScreen = ({ navigation, route }) => {
 			</S.ActorItemView>
 		);
 	};
+	
 	useEffect(() => {
-		console.log('Mounted with flag');
-		return () => {
-			console.log('UNMOUNTED with flah');
-		};
-	}, [flag]);
-
-	useEffect(() => {
-		console.log('Mounted with text');
-		return () => {
-			console.log('UNMOUNTED with text');
-		};
-	}, [text]);
-
-	useEffect(() => {
-		console.log('MovieScreen mounted');
+		// console.log('MovieScreen mounted');
+		// const movie = moviePopular ? moviePopular : movieTopRated;
 		fetchMovieData(movie.id)
 			.then((data) => {
-				refYear.current = obtainReleaseYear();
+				// refBackdropImgUrl.current = createImgUrl(movie.backdrop_path);
+				refYear.current = obtainReleaseYear(movie);
 				refMainCast.current = data[0].cast.slice(0, 4);
 				setStatus(prevState => ({
 					...prevState,
@@ -86,9 +75,9 @@ const MovieScreen = ({ navigation, route }) => {
 					isError: true
 				}));
 			});	
-		return () => {
-			console.log('MovieScreen UNMOUNTED');
-		};	
+		// return () => {
+		// 	console.log('MovieScreen UNMOUNTED');
+		// };	
 	}, []);
 
 	
@@ -114,12 +103,10 @@ const MovieScreen = ({ navigation, route }) => {
 				</S.RowView>
 
 				<S.RowView>
-					<S.Button onPress={() => setFlag(!flag)}>
+					<S.Button onPress={() => Alert.alert('Nice choice!', 'You wanna watch this movie...')}>
 						<S.Text>WATCH NOW</S.Text>
 					</S.Button>
-					<S.Button onPress={() => setText(!text)}>
-						<S.Text>WATCH text</S.Text>
-					</S.Button>
+					
 					<Rating
 						imageSize={18}
 						readonly={true}
@@ -184,4 +171,3 @@ const MovieScreen = ({ navigation, route }) => {
 };
 
 export default MovieScreen;
-

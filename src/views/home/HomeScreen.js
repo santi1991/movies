@@ -34,8 +34,8 @@ const HomeScreen = ({ navigation, route }) => {
 		});
 	};
 
-	const handlePressPoster = (movie, type) => {
-		navigation.navigate('MovieScreen', { movieId: movie.id, type });
+	const handlePressPoster = (movie) => {
+		navigation.navigate('MovieScreen', { movieId: movie.id });
 	};
 
 	// const handlePressPoster = useCallback((movie) => {
@@ -58,27 +58,30 @@ const HomeScreen = ({ navigation, route }) => {
 					onHideModal={setSettingsVisible}
 				/>
 
-				<S.IconButton
-					onPress={() => setSettingsVisible(true)}
-					alignSelf={'flex-end'}
-				>
-					<Icon
-						name='settings'
-						size={21}
-						color={theme.colors.background}
-					/>
-				</S.IconButton>
+				<S.RowView>
+					<S.IconButton
+						onPress={() => navigation.navigate('FavoritesScreen')}
+						alignSelf={'flex-start'}
+					>
+						<Icon
+							name='favorite'
+							size={21}
+							color={theme.colors.background}
+						/>
+					</S.IconButton>
 
-				<S.IconButton
-					onPress={() => navigation.navigate('FavoritesScreen')}
-					alignSelf={'flex-start'}
-				>
-					<Icon
-						name='settings'
-						size={21}
-						color={theme.colors.background}
-					/>
-				</S.IconButton>
+					<S.IconButton
+						onPress={() => setSettingsVisible(true)}
+						alignSelf={'flex-end'}
+					>
+						<Icon
+							name='more-vert'
+							size={30}
+							color={theme.colors.background}
+						/>
+					</S.IconButton>
+
+				</S.RowView>
 
 				<S.HeaderContainer>
 					<HeaderSection
@@ -89,16 +92,16 @@ const HomeScreen = ({ navigation, route }) => {
 				</S.HeaderContainer>
 
 				<S.ListContainer>
-					<PopularList 
+					<PopularList
 						popularMovies={filtered.filteredPopular}
-						onPressPoster={handlePressPoster} 
+						onPressPoster={handlePressPoster}
 					/>
-					<TopRatedList 
+					<TopRatedList
 						topRatedMovies={filtered.filteredTopRated}
-						onPressPoster={handlePressPoster} 			
+						onPressPoster={handlePressPoster}
 					/>
-				</S.ListContainer>				
-				
+				</S.ListContainer>
+
 			</S.ScreenScrollView>
 		</S.ScreenContainer>
 	);

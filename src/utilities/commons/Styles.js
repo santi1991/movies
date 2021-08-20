@@ -12,6 +12,7 @@ export const ScreenScrollView = styled.ScrollView`
 	background-color: ${(props)  => props.theme.colors.background};
 `;
 
+
 export const HeaderContainer = styled.View`
 	background-color: ${(props)  => props.theme.colors.background};
 	flex-grow: 1;

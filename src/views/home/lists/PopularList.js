@@ -15,11 +15,11 @@ const PopularList = ({ popularMovies, onPressPoster }) => {
 	const renderMoviePoster = (movie) => {
 		const posterImgUrl = createImgUrl(movie.poster_path);
 		return (
-			<Pressable onPress={() => onPressPoster(movie, 'popular')}>
+			<Pressable onPress={() => onPressPoster(movie)}>
 				<MoviePoster 
 					movie={movie} 
 					imgUrl={posterImgUrl}
-					color={theme.colors.background}
+					color={theme.colors.surface}
 				/>
 			</Pressable>
 		);
